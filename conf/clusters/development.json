@@ -1,0 +1,37 @@
+{
+    "autoscale": {
+        "min_workers": 2,
+        "max_workers": 4
+    },
+    "cluster_name": "wwxf-rasterframes",
+    "spark_version": "7.3.x-scala2.12",
+    "spark_conf": {
+        "spark.serializer": "org.apache.spark.serializer.KryoSerializer",
+        "spark.kryo.registrator": "org.locationtech.rasterframes.util.RFKryoRegistrator",
+        "spark.kryoserializer.buffer.max": "1024m"
+        "spark.databricks.delta.preview.enabled": "true"
+    },
+    "azure_attributes": {
+        "first_on_demand": 1,
+        "availability": "ON_DEMAND_AZURE",
+        "spot_bid_max_price": -1
+    },
+    "node_type_id": "Standard_DS3_v2",
+    "driver_node_type_id": "Standard_DS3_v2",
+    "ssh_public_keys": [],
+    "custom_tags": {},
+    "spark_env_vars": {
+        "PYSPARK_PYTHON": "/databricks/python3/bin/python3",
+        "LD_LIBRARY_PATH": "$LD_LIBRARY_PATH:/usr/local/lib"
+    },
+    "autotermination_minutes": 30,
+    "enable_elastic_disk": true,
+    "cluster_source": "UI",
+    "init_scripts": [
+        {
+            "dbfs": {
+                "destination": "dbfs:/databricks/scripts/pyrasterframes_init.sh"
+            }
+        }
+    ]
+}
