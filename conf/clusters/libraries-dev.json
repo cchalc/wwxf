@@ -2,10 +2,10 @@
   "cluster_id": "10201-my-cluster",
   "libraries": [
     {
-      "jar": "dbfs:/mnt/libraries/library.jar"
+      "jar": "dbfs:/databricks/libraries/pyrasterframes-assembly-0.10.1-dbr7.3.jar"
     },
     {
-      "whl": "dbfs:/mnt/libraries/mlflow-0.0.1.dev0-py2-none-any.whl"
+      "whl": "dbfs:/databricks/libraries/pyrasterframes-0.10.1.dev0+dbr7.3-py3-none-any.whl"
     },
     {
       "maven": {

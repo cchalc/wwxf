@@ -30,7 +30,7 @@
     "init_scripts": [
         {
             "dbfs": {
-                "destination": "dbfs:/databricks-scripts/rasterframes_init.sh"
+                "destination": "dbfs:/databricks/scripts/pyrasterframes_init.sh"
             }
         }
     ]
