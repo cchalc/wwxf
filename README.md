@@ -1,0 +1,2 @@
+# wwxf
+wildfires forecasting
