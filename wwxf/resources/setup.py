@@ -18,8 +18,8 @@ dbutils.widgets.removeAll()
 
 # COMMAND ----------
 
-demo = "geospatial"
-dbutils.widgets.text("demo", demo, "demo")
+project = "wwxf"
+dbutils.widgets.text("projectid", project, "project") # name, value, label
 
 # COMMAND ----------
 
@@ -47,14 +47,34 @@ def clean_string(a: str) -> str:
 
 user = dbutils.notebook.entry_point.getDbutils().notebook().getContext().tags().get("user").get()
 username = clean_string(user.partition('@')[0])
+
 print("Created variables:")
 print("user: {}".format(user))
 print("username: {}".format(username))
-dbName = re.sub(r'\W+', '_', username) + "_" + demo
-path = f"/Users/{user}/{demo}"
-dbutils.widgets.text("path", path, "path")
-dbutils.widgets.text("dbName", dbName, "dbName")
+
+# user settings
+user_dbName = re.sub(r'\W+', '_', username) + "_" + project
+user_path = f"/Users/{user}/{project}"
+dbutils.widgets.text("user_dbName", user_dbName, "user_dbName")
+dbutils.widgets.text("user_path", user_path, "user_path")
 print(f"path (default path): {path}")
-spark.sql("""create database if not exists {} LOCATION '{}/{}/tables' """.format(dbName, demo, path))
-spark.sql("""USE {}""".format(dbName))
 print("dbName (using database): {}".format(dbName))
+spark.sql("""create database if not exists {} LOCATION '{}/{}/tables' """.format(user_dbName, project, user_path))
+spark.sql("""USE {}""".format(user_dbName))
+
+print(f"By default using user database {user_dbName}. Please switch to project database if needed")
+
+
+# project settings
+dbName = re.sub(r'\W+', '_', username) + "_" + project
+path = f"/Users/{user}/{project}"
+dbutils.widgets.text("user_dbName", user_dbName, "user_dbName")
+dbutils.widgets.text("user_path", user_path, "user_path")
+print(f"path (default path): {path}")
+print("dbName (using database): {}".format(dbName))
+spark.sql("""create database if not exists {} LOCATION '{}/{}/tables' """.format(user_dbName, project, user_path))
+spark.sql("""USE {}""".format(user_dbName))
+
+# COMMAND ----------
+
+# MAGIC %fs ls /
