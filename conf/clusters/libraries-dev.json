@@ -8,5 +8,11 @@
       "maven": {
         "coordinates": "com.azavea.geotrellis:gdal-warp-bindings:1.1.1"
       }
+    },
+   {
+    "pypi": {
+      "package": "pyshp",
+      "repo": "https://my-pypi-mirror.com"
     }
+  }
 }
