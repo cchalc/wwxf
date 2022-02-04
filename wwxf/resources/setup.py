@@ -57,23 +57,32 @@ user_dbName = re.sub(r'\W+', '_', username) + "_" + project
 user_path = f"/Users/{user}/{project}"
 dbutils.widgets.text("user_dbName", user_dbName, "user_dbName")
 dbutils.widgets.text("user_path", user_path, "user_path")
-print(f"path (default path): {path}")
-print("dbName (using database): {}".format(dbName))
+print(f"path (user path): {user_path}")
+print("dbName (using database): {}".format(user_dbName))
 spark.sql("""create database if not exists {} LOCATION '{}/{}/tables' """.format(user_dbName, project, user_path))
 spark.sql("""USE {}""".format(user_dbName))
 
 print(f"By default using user database {user_dbName}. Please switch to project database if needed")
 
 
-# project settings
-dbName = re.sub(r'\W+', '_', username) + "_" + project
-path = f"/Users/{user}/{project}"
-dbutils.widgets.text("user_dbName", user_dbName, "user_dbName")
-dbutils.widgets.text("user_path", user_path, "user_path")
-print(f"path (default path): {path}")
-print("dbName (using database): {}".format(dbName))
-spark.sql("""create database if not exists {} LOCATION '{}/{}/tables' """.format(user_dbName, project, user_path))
-spark.sql("""USE {}""".format(user_dbName))
+# project settings -- temporary
+dbName = project
+bronze_path = f"/mnt/bronze"
+silver_path = f"/mnt/silver"
+gold_path = f"/mnt/gold"
+project_path = f"/{project}" # just temporary until we decide
+
+dbutils.widgets.text("dbName", dbName, "dbName")
+dbutils.widgets.text("project_path", project_path, "project_path")
+print(f"path (project path): {project_path}")
+
+spark.sql("""create database if not exists {} LOCATION '{}/tables' """.format(dbName, project))
+# spark.sql("""USE {}""".format(user_dbName))
+# print("dbName (using database): {}".format(dbName))
+
+# COMMAND ----------
+
+# dbutils.fs.rm("/wwxf/", True)
 
 # COMMAND ----------
 
