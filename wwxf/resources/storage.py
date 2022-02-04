@@ -8,6 +8,10 @@ ACCOUNT_KEY = dbutils.secrets.get(scope='blob-scope', key='storage-account-key1'
 
 # COMMAND ----------
 
+# dbutils.fs.unmount("/mnt/bronze")
+
+# COMMAND ----------
+
 DIRECTORY = "/"
 
 for layer in ["bronze", "silver", "gold"]:
@@ -26,4 +30,4 @@ for layer in ["bronze", "silver", "gold"]:
 
 # COMMAND ----------
 
-# MAGIC %fs ls /mnt
+# MAGIC %fs ls /mnt/bronze

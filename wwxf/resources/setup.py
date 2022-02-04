@@ -5,7 +5,7 @@
 
 # COMMAND ----------
 
-# MAGIC %pip install /dbfs/databricks/libraries/pyrasterframes-0.10.1.dev0+dbr7.3-py3-none-any.whl
+#%pip install /dbfs/databricks/libraries/pyrasterframes-0.10.1.dev0+dbr7.3-py3-none-any.whl
 
 # COMMAND ----------
 
@@ -57,7 +57,7 @@ user_dbName = re.sub(r'\W+', '_', username) + "_" + project
 user_path = f"/Users/{user}/{project}"
 dbutils.widgets.text("user_dbName", user_dbName, "user_dbName")
 dbutils.widgets.text("user_path", user_path, "user_path")
-print(f"path (user path): {user_path}")
+print(f"user path (user path): {user_path}")
 print("dbName (using database): {}".format(user_dbName))
 spark.sql("""create database if not exists {} LOCATION '{}/{}/tables' """.format(user_dbName, project, user_path))
 spark.sql("""USE {}""".format(user_dbName))
@@ -74,7 +74,7 @@ project_path = f"/{project}" # just temporary until we decide
 
 dbutils.widgets.text("dbName", dbName, "dbName")
 dbutils.widgets.text("project_path", project_path, "project_path")
-print(f"path (project path): {project_path}")
+print(f"project path (project path): {project_path}")
 
 spark.sql("""create database if not exists {} LOCATION '{}/tables' """.format(dbName, project))
 # spark.sql("""USE {}""".format(user_dbName))
