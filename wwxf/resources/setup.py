@@ -11,3 +11,7 @@
 
 # MAGIC %md
 # MAGIC ## Path and database configuration
+
+# COMMAND ----------
+
+
