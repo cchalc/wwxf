@@ -1,9 +1,9 @@
 # Databricks notebook source
-# MAGIC %run ../resources/setup
+# MAGIC %pip install /dbfs/databricks/libraries/pyrasterframes-0.10.1.dev0+dbr7.3-py3-none-any.whl
 
 # COMMAND ----------
 
-# MAGIC %pip install /dbfs/databricks/libraries/pyrasterframes-0.10.1.dev0+dbr7.3-py3-none-any.whl
+# MAGIC %run ../resources/setup
 
 # COMMAND ----------
 
@@ -95,9 +95,34 @@ df_results
 
 # COMMAND ----------
 
+display(df_results)
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ## RDPS PR
 
 # COMMAND ----------
 
+# MAGIC %fs ls /mnt/bronze/rdps_pr
 
+# COMMAND ----------
+
+rf = spark.read.raster("dbfs:/mnt/bronze/rdps_pr/RDPS.ETA_PR-2021121500.tiff")
+rf.printSchema()
+
+# COMMAND ----------
+
+# crs = rf.select(rf_crs("proj_raster").alias("value")).first()
+# print("CRS", crs)
+
+# COMMAND ----------
+
+rf_ti
+
+# COMMAND ----------
+
+rf.select(
+    rf_extent("proj_raster").alias("extent"),
+    rf_tile("proj_raster").alias("tile")
+)
