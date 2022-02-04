@@ -113,16 +113,4 @@ rf.printSchema()
 
 # COMMAND ----------
 
-# crs = rf.select(rf_crs("proj_raster").alias("value")).first()
-# print("CRS", crs)
-
-# COMMAND ----------
-
-rf_ti
-
-# COMMAND ----------
-
-rf.select(
-    rf_extent("proj_raster").alias("extent"),
-    rf_tile("proj_raster").alias("tile")
-)
+# MAGIC %fs ls /mnt/bronze/fire_weather_forecast
