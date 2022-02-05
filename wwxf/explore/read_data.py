@@ -1,5 +1,15 @@
 # Databricks notebook source
+# MAGIC %md
+# MAGIC # Testing out reading different filetypes
+# MAGIC ## install notebook scoped libraries
+
+# COMMAND ----------
+
 # MAGIC %pip install /dbfs/databricks/libraries/pyrasterframes-0.10.1.dev0+dbr7.3-py3-none-any.whl
+
+# COMMAND ----------
+
+# MAGIC %pip install pyshp
 
 # COMMAND ----------
 
@@ -113,4 +123,39 @@ rf.printSchema()
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ## Fire Weather Forecast
+
+# COMMAND ----------
+
 # MAGIC %fs ls /mnt/bronze/fire_weather_forecast
+
+# COMMAND ----------
+
+import os
+from os.path import exists
+from pathlib import Path
+
+# COMMAND ----------
+
+# setting up path in case we need to process in parallel 
+fwf_path = f"{bronze_path}/fire_weather_forecast/"
+path = Path(fwf_path)
+print(path)
+
+# COMMAND ----------
+
+num_cores = sc.defaultParallelism
+print(f'We currently have {num_cores} worker cores available to us.')
+
+# COMMAND ----------
+
+shp_files = os.listdir(fwf_path)
+
+# COMMAND ----------
+
+# MAGIC %fs ls /mnt/bronze/fire_weather_forecast
+
+# COMMAND ----------
+
+print(user_path)
