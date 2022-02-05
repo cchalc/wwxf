@@ -64,6 +64,10 @@ print(weather_station.printSchema())
 
 # COMMAND ----------
 
+weather_station.write.saveAsTable('weather_station', format='delta', mode='overwrite')
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ## Example Raster
 
@@ -114,12 +118,84 @@ display(df_results)
 
 # COMMAND ----------
 
+# setting up path in case we need to process in parallel 
+rdps_path = f"/dbfs{bronze_path}/rdps_pr/"
+path = Path(rdps_path)
+print(path)
+
+# COMMAND ----------
+
 # MAGIC %fs ls /mnt/bronze/rdps_pr
 
 # COMMAND ----------
 
-rf = spark.read.raster("dbfs:/mnt/bronze/rdps_pr/RDPS.ETA_PR-2021121500.tiff")
+rf = spark.read.raster("/dbfs/mnt/bronze/rdps_pr/RDPS.ETA_PR-2021121500.tiff")
 rf.printSchema()
+
+# COMMAND ----------
+
+crs = rf.select(rf_crs("proj_raster")).first()[0]
+print(crs)
+
+# COMMAND ----------
+
+rf.select(
+  rf_extent("proj_raster").alias("extent"),
+  rf_tile("proj_raster").alias("tile")
+)
+
+# COMMAND ----------
+
+tile = rf.select(rf_tile("proj_raster")).first()[0]
+tile.show()
+
+# COMMAND ----------
+
+# MAGIC %md 
+# MAGIC ### Create a catalog
+
+# COMMAND ----------
+
+from pyspark.sql import Row
+import os
+
+raster_list = [rdps_path + tiff for tiff in os.listdir(rdps_path)]
+
+row = Row('shapefile_path') 
+raster_rdd = sc.parallelize(raster_list)
+catalog_rdps = (
+  raster_rdd.map(row)
+    .toDF()
+)
+
+display(catalog_rdps)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Multiple singleband rasters
+
+# COMMAND ----------
+
+
+
+# COMMAND ----------
+
+# DBTITLE 1,Question: Can we pull these raster images from an external source?
+# from pyspark import SparkFiles
+# from pyspark.sql import functions as F
+
+# spark.sparkContext.addFile("https://modis-pds.s3.amazonaws.com/MCD43A4.006/2018-07-04_scenes.txt")
+
+# scene_list = spark.read \
+#     .format("csv") \
+#     .option("header", "true") \
+#     .load(SparkFiles.get("2018-07-04_scenes.txt"))
+# scene_list
+
+# COMMAND ----------
+
+
 
 # COMMAND ----------
 
@@ -254,6 +330,7 @@ flattened.printSchema()
 
 # COMMAND ----------
 
+# DBTITLE 1,Write data out to delta
 flattened.write.saveAsTable('shapefiles', format='delta', mode='overwrite')
 
 # COMMAND ----------
