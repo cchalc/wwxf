@@ -5,14 +5,25 @@
       "jar": "dbfs:/databricks/libraries/pyrasterframes-assembly-0.10.1-dbr7.3.jar"
     },
     {
+      "whl": "dbfs:/databricks/libraries/pyrasterframes-0.10.1.dev0+dbr7.3-py3-none-any.whl"
+    },
+    {
       "maven": {
         "coordinates": "com.azavea.geotrellis:gdal-warp-bindings:1.1.1"
       }
     },
-   {
-    "pypi": {
-      "package": "pyshp",
-      "repo": "https://my-pypi-mirror.com"
+    {
+      "pypi": {
+        "package": "simplejson",
+        "repo": "https://my-pypi-mirror.com"
+      }
+    },
+    {
+      "cran": {
+        "package": "ada",
+        "repo": "https://cran.us.r-project.org"
+      }
     }
-  }
+  ]
 }
+

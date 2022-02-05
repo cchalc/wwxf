@@ -8,9 +8,8 @@
     "spark_conf": {
         "spark.serializer": "org.apache.spark.serializer.KryoSerializer",
         "spark.kryo.registrator": "org.locationtech.rasterframes.util.RFKryoRegistrator",
-        "spark.kryoserializer.buffer.max": "1024m",
-        "spark.databricks.delta.preview.enabled": "true",
-        "spark.databricks.passthrough.enabled": "true"
+        "spark.kryoserializer.buffer.max": "1024m"
+        "spark.databricks.delta.preview.enabled": "true"
     },
     "azure_attributes": {
         "first_on_demand": 1,
