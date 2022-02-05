@@ -124,7 +124,7 @@ rf.printSchema()
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## Fire Weather Forecast
+# MAGIC ## Fire Weather Forecast (Shapefile)
 
 # COMMAND ----------
 
@@ -139,7 +139,7 @@ from pathlib import Path
 # COMMAND ----------
 
 # setting up path in case we need to process in parallel 
-fwf_path = f"{bronze_path}/fire_weather_forecast/"
+fwf_path = f"/dbfs{bronze_path}/fire_weather_forecast/"
 path = Path(fwf_path)
 print(path)
 
@@ -150,12 +150,123 @@ print(f'We currently have {num_cores} worker cores available to us.')
 
 # COMMAND ----------
 
-shp_files = os.listdir(fwf_path)
+shp_files = os.listdir(path)
+for file in shp_files:
+  print(file)
 
 # COMMAND ----------
 
-# MAGIC %fs ls /mnt/bronze/fire_weather_forecast
+shapefile_list = [fwf_path + shapefile for shapefile in os.listdir(fwf_path)]
+print(shapefile_list)
 
 # COMMAND ----------
 
-print(user_path)
+print(fwf_path)
+
+# COMMAND ----------
+
+from pyspark.sql import Row
+
+# This might not be needed but this allows us to search through a directory structure and ingest many shapefiles
+# suggested directory structure bronze/shapefiles/WF_WEATHER_FCST_ZONE_S3_GCSWGS84
+
+# shapefile_list = [fwf_path + shapefile for shapefile in os.listdir(fwf_path)]
+
+shapefile_list = [fwf_path + 'WF_WEATHER_FCST_ZONE_S3_GCSWGS84']
+
+row = Row('shapefile_path') 
+shapefile_rdd = sc.parallelize(shapefile_list)
+shapefile_df = (
+  shapefile_rdd.map(row)
+    .toDF()
+)
+
+display(shapefile_df)
+
+# COMMAND ----------
+
+import shapefile
+from pyspark.sql.types import MapType, ArrayType, StringType
+
+def shapefile_reader(shapefile_path):
+  with shapefile.Reader(shapefile_path) as shp:
+      shape_records = []
+
+      # Iterate through each shape record
+      for shape in shp.shapeRecords():
+        shape_record = shape.record.as_dict() # Read record
+        geojson = {'geojson':shape.shape.__geo_interface__.__str__()} # Read shapefile GeoJSON
+        shape_records.append({**shape_record, **geojson}) # Concatenate and append
+        
+  return(shape_records)
+
+# Register udf
+shapefile_reader_udf = udf(shapefile_reader, ArrayType(MapType(StringType(), StringType())))
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC apply the udf. See [user-defined functions in python](https://docs.databricks.com/spark/latest/spark-sql/udf-python.html#user-defined-functions---python)
+
+# COMMAND ----------
+
+read_shapefile_result = shapefile_df.withColumn('shapefile_data', shapefile_reader_udf('shapefile_path'))
+
+# COMMAND ----------
+
+read_shapefile_result.show()
+
+# COMMAND ----------
+
+# MAGIC %md Since the output of the `udf` is an array, we explode the column to return a row for each shape record (and corresponding shape) across all the shapefiles.
+
+# COMMAND ----------
+
+from pyspark.sql.functions import explode
+
+exploded = (read_shapefile_result
+            .select('shapefile_data')
+            .withColumn('exploded', explode('shapefile_data'))
+            .drop('shapefile_data')
+           )
+display(exploded)
+
+print(f'We had {shapefile_df.count()} shapefiles with a total of {exploded.count()} shapes.')
+
+# COMMAND ----------
+
+# MAGIC %md Assuming the schemas for the records are consistent, we can flatten it out into a more useful format
+
+# COMMAND ----------
+
+from pyspark.sql.functions import col
+
+flatten_keys = list(exploded.limit(1).collect()[0][0].keys())
+
+expanded = [col("exploded").getItem(k).alias(k) for k in flatten_keys]
+flattened = exploded.select(*expanded)
+
+display(flattened)
+
+# COMMAND ----------
+
+flattened.printSchema()
+
+# COMMAND ----------
+
+flattened.write.saveAsTable('shapefiles', format='delta', mode='overwrite')
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select
+# MAGIC   WFZ_ID,
+# MAGIC   Shape_Area,
+# MAGIC   NAME
+# MAGIC from
+# MAGIC   shapefiles
+# MAGIC order by Shape_Area DESC
+
+# COMMAND ----------
+
+
