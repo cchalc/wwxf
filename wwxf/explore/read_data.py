@@ -36,6 +36,13 @@ spark.withRasterFrames()
 
 # COMMAND ----------
 
+# other library imports 
+import os
+from os.path import exists
+from pathlib import Path
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC # Read data
 
@@ -127,20 +134,70 @@ display(catalog_rdps)
 
 # COMMAND ----------
 
-def get_band(st):
-    return st.split("-")[1].split(".")[0]
-
-bands = [get_band(st) for st in raster_list]
-
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC ### Multiple singleband rasters
 
 # COMMAND ----------
 
+def get_band(st):
+    return st.split("-")[1].split(".")[0]
 
+bands = [get_band(st) for st in raster_list]
+
+catalog = ','.join(bands) + '\n' + ','.join(raster_list)
+rf = (spark.read.raster(
+  catalog,
+  bands,
+  tile_dimensions=(256, 256)
+).select(*bands))
+display(rf)
+
+# COMMAND ----------
+
+rf.printSchema()
+
+# COMMAND ----------
+
+(rf.select(
+  rf_tile('2021121500').alias('500'),
+  rf_tile('2021121501').alias('501'),
+  rf_tile('2021121502').alias('502'),
+  rf_tile('2021121503').alias('503'),
+))
+
+# COMMAND ----------
+
+def plot_tiff(band):
+  return rf.select(rf_crs(band), rf_extent(band), rf_tile(band))
+
+plot_tiff(band='2021121500')
+
+# COMMAND ----------
+
+# MAGIC %md 
+# MAGIC #### Compute NDVI Example
+
+# COMMAND ----------
+
+# MAGIC %md 
+# MAGIC ### trying to get plotting right
+
+# COMMAND ----------
+
+# import pandas as pd
+
+# mb_cat = pd.DataFrame([
+#     {'500': '/dbfs/mnt/bronze/rdps_pr/RDPS.ETA_PR-2021121500.tiff',
+#      '501': '/dbfs/mnt/bronze/rdps_pr/RDPS.ETA_PR-2021121501.tiff'
+#     },
+# ])
+# mb2 = spark.read.raster(
+#     spark.createDataFrame(mb_cat),
+#     catalog_col_names=['500', '501'],
+#     band_indexes=[0, 1],
+#     tile_dimensions=(64,64)
+# )
+# mb2.printSchema()
 
 # COMMAND ----------
 
@@ -168,12 +225,6 @@ bands = [get_band(st) for st in raster_list]
 # COMMAND ----------
 
 # MAGIC %fs ls /mnt/bronze/fire_weather_forecast
-
-# COMMAND ----------
-
-import os
-from os.path import exists
-from pathlib import Path
 
 # COMMAND ----------
 

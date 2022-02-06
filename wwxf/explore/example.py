@@ -65,6 +65,10 @@ rf = spark.read.raster(catalog, bands) \
 
 # COMMAND ----------
 
+rf.printSchema()
+
+# COMMAND ----------
+
 df_results = rf.select('longitude_latitude', rf_tile('red'), rf_tile('NIR'), rf_tile('NDVI'))
 print(f"`df_results` type? {type(df_results)}")
 df_results
