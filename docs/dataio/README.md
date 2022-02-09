@@ -1,5 +1,14 @@
 # Notes on Data
 
+# Data Summary
+
+## Sample Data
+
+Uploaded manually to Azure Storage 
+`az storage blob upload-batch --destination ContainerName --account-name YourAccountName --destination-path DirectoryInBlob --source /path/to/your/data`
+
+This can be found in the `sample_data_upload.sh`
+
 # Rasterframes
 
 ## RDPS
