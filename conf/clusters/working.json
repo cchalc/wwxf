@@ -1,0 +1,36 @@
+{
+    "num_workers": 2,
+    "cluster_name": "raster-test",
+    "spark_version": "7.3.x-scala2.12",
+    "spark_conf": {
+        "spark.databricks.passthrough.enabled": "true",
+        "spark.databricks.delta.preview.enabled": "true",
+        "spark.kryoserializer.buffer.max": "1024m",
+        "spark.kryo.registrator": "org.locationtech.rasterframes.util.RFKryoRegistrator",
+        "spark.serializer": "org.apache.spark.serializer.KryoSerializer"
+    },
+    "azure_attributes": {
+        "first_on_demand": 1,
+        "availability": "SPOT_WITH_FALLBACK_AZURE",
+        "spot_bid_max_price": -1
+    },
+    "node_type_id": "Standard_DS3_v2",
+    "driver_node_type_id": "Standard_DS3_v2",
+    "ssh_public_keys": [],
+    "custom_tags": {},
+    "spark_env_vars": {
+        "LD_LIBRARY_PATH": "$LD_LIBRARY_PATH:/usr/local/lib"
+    },
+    "autotermination_minutes": 30,
+    "enable_elastic_disk": true,
+    "cluster_source": "UI",
+    "init_scripts": [
+        {
+            "dbfs": {
+                "destination": "dbfs:/databricks/scripts/pyrasterframes_init.sh"
+            }
+        }
+    ],
+    "single_user_name": "christopher.chalcraft@databricks.com",
+    "cluster_id": "0203-203019-209sd29o"
+}
