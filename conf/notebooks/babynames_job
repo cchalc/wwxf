@@ -1,0 +1,94 @@
+{
+    "settings": {
+        "timeout_seconds": 0,
+        "email_notifications": {},
+        "name": "get-baby-names",
+        "max_concurrent_runs": 5,
+        "tasks": [
+            {
+                "existing_cluster_id": "0114-053019-fmho5ft6",
+                "notebook_task": {
+                    "notebook_path": "/Repos/christopher.chalcraft@databricks.com/wwxf/notebooks/load_data"
+                },
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "task_key": "get-baby-names",
+                "description": ""
+            },
+            {
+                "existing_cluster_id": "0114-053019-fmho5ft6",
+                "notebook_task": {
+                    "notebook_path": "/Repos/christopher.chalcraft@databricks.com/wwxf/notebooks/babynames",
+                    "base_parameters": {
+                        "year": "2014"
+                    }
+                },
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "task_key": "filter-baby-names-2014",
+                "depends_on": [
+                    {
+                        "task_key": "get-baby-names"
+                    }
+                ]
+            },
+            {
+                "existing_cluster_id": "0114-053019-fmho5ft6",
+                "notebook_task": {
+                    "notebook_path": "/Repos/christopher.chalcraft@databricks.com/wwxf/notebooks/babynames",
+                    "base_parameters": {
+                        "year": "2010"
+                    }
+                },
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "task_key": "filter-baby-names-2010",
+                "depends_on": [
+                    {
+                        "task_key": "get-baby-names"
+                    }
+                ]
+            },
+            {
+                "existing_cluster_id": "0114-053019-fmho5ft6",
+                "notebook_task": {
+                    "notebook_path": "/Repos/christopher.chalcraft@databricks.com/wwxf/notebooks/babynames",
+                    "base_parameters": {
+                        "year": "2008"
+                    }
+                },
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "task_key": "filter-baby-names-multi",
+                "depends_on": [
+                    {
+                        "task_key": "get-baby-names"
+                    }
+                ]
+            }
+        ],
+        "job_clusters": [
+            {
+                "job_cluster_key": "get-baby-names_cluster",
+                "new_cluster": {
+                    "cluster_name": "",
+                    "spark_version": "9.1.x-scala2.12",
+                    "spark_conf": {
+                        "spark.databricks.delta.preview.enabled": "true"
+                    },
+                    "azure_attributes": {
+                        "availability": "ON_DEMAND_AZURE",
+                        "first_on_demand": 1,
+                        "spot_bid_max_price": -1
+                    },
+                    "node_type_id": "Standard_DS3_v2",
+                    "spark_env_vars": {
+                        "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+                    },
+                    "enable_elastic_disk": true,
+                    "num_workers": 8
+                }
+            }
+        ]
+    }
+}
