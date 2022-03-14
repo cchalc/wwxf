@@ -1,4 +1,4 @@
-name: custom r pipeline
+name: wwxf setup
 
 on:
   workflow_dispatch:
