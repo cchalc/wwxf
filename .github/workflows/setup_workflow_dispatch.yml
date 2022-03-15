@@ -92,6 +92,11 @@ jobs:
           echo "[DEFAULT]" >> ~/.databrickscfg
           echo "host = $DATABRICKS_HOST" >> ~/.databrickscfg
           echo "token = $DATABRICKS_TOKEN" >> ~/.databrickscfg
+
+      - 
+        name: wait for cluster to be in running state
+        run: |
+          sleep 240
       - 
         name: install libraries
         run: |
