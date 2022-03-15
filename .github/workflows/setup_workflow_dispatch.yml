@@ -46,7 +46,7 @@ jobs:
       - 
         name: set up init script
         run: |
-          dbfs ls
+          databricks fs ls
           #          databricks fs mkdirs dbfs:/databricks/scripts
           #          databricks fs cp --overwrite ./conf/scripts/pyrasterframes_init.sh dbfs:/databricks/scripts/pyrasterframes_init.sh --profile DEFAULT
           #          databricks fs mkdirs dbfs:/databricks/libraries
