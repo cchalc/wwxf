@@ -55,4 +55,4 @@ jobs:
       - 
         name: create cluster
         run: |
-          #          databricks clusters create --json-file ./conf/clusters/development.json
+          databricks clusters create --json-file ./conf/clusters/development.json
