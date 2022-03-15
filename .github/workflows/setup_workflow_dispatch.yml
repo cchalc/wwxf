@@ -60,8 +60,7 @@ jobs:
       - 
         name: install libraries
         run: |
-          CLUSTER_ID=`databricks clusters list --output JSON | jq -r '( .clusters[] | select(.default_tags.ClusterName=="rocinante") .cluster_id )'`
-          echo "$CLUSTER_ID"
+          CLUSTER_ID=`databricks clusters list --output JSON | jq -r '( .clusters[] | select(.default_tags.ClusterName=="wwxf-rasterframes") .cluster_id )'`
           sed "s/CLUSTER_ID/${CLUSTER_ID}/g" ./conf/clusters/libraries-dev.json > ~/install_libraries.json
           cat ~/install_libraries.json
-          #          curl -X POST --header "Authorization: Bearer $DATABRICKS_TOKEN" ${DATABRICKS_HOST}api/2.0/libraries/install --data @./conf/clusters/libraries-dev.json
+          curl -X POST --header "Authorization: Bearer $DATABRICKS_TOKEN" ${DATABRICKS_HOST}api/2.0/libraries/install --data @~/install_libraries.json
