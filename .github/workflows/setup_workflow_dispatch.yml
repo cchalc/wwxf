@@ -60,4 +60,6 @@ jobs:
       - 
         name: install libraries
         run: |
-          curl -X POST --header "Authorization: Bearer $DATABRICKS_TOKEN" ${DATABRICKS_HOST}api/2.0/libraries/install --data @./conf/clusters/libraries-dev.json
+          CLUSTER_ID=`databricks clusters list --output JSON | jq -r '( .clusters[] | select(.default_tags.ClusterName=="rocinante") .cluster_id )'`
+          echo "$CLUSTER_ID"
+          #          curl -X POST --header "Authorization: Bearer $DATABRICKS_TOKEN" ${DATABRICKS_HOST}api/2.0/libraries/install --data @./conf/clusters/libraries-dev.json
