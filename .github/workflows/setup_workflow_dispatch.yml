@@ -46,12 +46,11 @@ jobs:
       - 
         name: set up init script
         run: |
-          databricks fs ls
-          #          databricks fs mkdirs dbfs:/databricks/scripts
-          #          databricks fs cp --overwrite ./conf/scripts/pyrasterframes_init.sh dbfs:/databricks/scripts/pyrasterframes_init.sh --profile DEFAULT
-          #          databricks fs mkdirs dbfs:/databricks/libraries
-          #          databricks fs cp --overwrite ./conf/libraries/e74ff108_09c9_4774_9dde_8247e32b8234-pyrasterframes_assembly_0_10_1_dbr7_3-8c59b.jar dbfs:/databricks/libraries/pyrasterframes-assembly-0.10.1-dbr7.3.jar --profile DEFAULT
-          #          databricks fs cp --overwrite ./conf/libraries/pyrasterframes-0.10.1.dev0+dbr7.3-py3-none-any.whl dbfs:/databricks/libraries/pyrasterframes-0.10.1.dev0+dbr7.3-py3-none-any.whl --profile DEFAULT
+          databricks fs mkdirs dbfs:/databricks/scripts
+          databricks fs cp --overwrite ./conf/scripts/pyrasterframes_init.sh dbfs:/databricks/scripts/pyrasterframes_init.sh --profile DEFAULT
+          databricks fs mkdirs dbfs:/databricks/libraries
+          databricks fs cp --overwrite ./conf/libraries/e74ff108_09c9_4774_9dde_8247e32b8234-pyrasterframes_assembly_0_10_1_dbr7_3-8c59b.jar dbfs:/databricks/libraries/pyrasterframes-assembly-0.10.1-dbr7.3.jar --profile DEFAULT
+          databricks fs cp --overwrite ./conf/libraries/pyrasterframes-0.10.1.dev0+dbr7.3-py3-none-any.whl dbfs:/databricks/libraries/pyrasterframes-0.10.1.dev0+dbr7.3-py3-none-any.whl --profile DEFAULT
 
       - 
         name: create cluster
