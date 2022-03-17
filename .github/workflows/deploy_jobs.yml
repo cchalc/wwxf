@@ -47,4 +47,4 @@ jobs:
         name: copy notebooks
         run: |
           databricks workspace mkdirs "/wwxf"
-          databricks workspace import_dir -o -e ./notebooks /wwxf --profile DEFAULT
+          databricks workspace import_dir -o -e ./notebooks /wwxf/notebooks --profile DEFAULT
