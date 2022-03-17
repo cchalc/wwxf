@@ -1,0 +1,25 @@
+{
+  "name": "policycheck",
+  "email_notifications": {
+    "no_alert_for_skipped_runs": false
+  },
+  "max_concurrent_runs": 1,
+  "tasks": [
+    {
+      "task_key": "policycheck",
+      "notebook_task": {
+        "notebook_path": "/tmp/deleteme"
+      },
+        "policy_id": "606203597A00024A",
+        "azure_attributes": {
+          "first_on_demand": 1,
+          "availability": "ON_DEMAND_AZURE",
+          "spot_bid_max_price": -1
+        },
+        "num_workers": 1
+      },
+      "timeout_seconds": 0
+    }
+  ],
+  "format": "MULTI_TASK"
+}
