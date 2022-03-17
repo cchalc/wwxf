@@ -48,3 +48,8 @@ jobs:
         run: |
           databricks workspace mkdirs "/wwxf"
           databricks workspace import_dir -o -e ./notebooks /wwxf/notebooks --profile DEFAULT
+
+      - 
+        name: create jobs
+        run: |
+          databricks jobs create --json-file ./conf/jobs/baby_names/get_baby_names.json
