@@ -65,7 +65,7 @@ jobs:
         name: run tests
         run: |
           CLUSTER_ID = $(databricks clusters list --output JSON | jq -r '( .clusters[] | select(.default_tags.ClusterName=="rocinante") .cluster_id )')
-          nutter run "/wwxf/tests" --cluster_id $(CLUSTER_ID) --recursive --timeout 500
+          nutter run "/wwxf/tests" --cluster_id $CLUSTER_ID --recursive --timeout 500
       - 
         name: create jobs
         run: |
