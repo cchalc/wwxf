@@ -1,5 +1,4 @@
 {
-    "settings": {
         "timeout_seconds": 0,
         "email_notifications": {},
         "name": "get-baby-names",
@@ -90,5 +89,4 @@
                 }
             }
         ]
-    }
 }
